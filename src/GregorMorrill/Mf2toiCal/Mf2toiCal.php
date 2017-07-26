@@ -9,7 +9,6 @@ use BarnabyWalters\Mf2 as Mf2helper;
 
 mb_internal_encoding('UTF-8');
 define('PRODID_DOMAIN', 'example.com');
-require('vendor/autoload.php');
 
 
 /**

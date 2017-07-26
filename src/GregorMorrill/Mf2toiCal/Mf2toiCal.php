@@ -8,21 +8,11 @@ use BarnabyWalters\Mf2 as Mf2helper;
 
 
 mb_internal_encoding('UTF-8');
-define('PRODID_DOMAIN', 'example.com');
 
-
-/**
- * Function to call Mf2toiCal::convert()
- * @param string $url
- * @param string $lang defaults to 'en'
- * @param string $charset defaults to 'utf-8'
- */
-function convert($url, $lang = 'en', $charset = 'utf-8')
+if ( !defined('PRODID_DOMAIN') )
 {
-	$Mf2toiCal = new Mf2toiCal($url, $lang, $charset);
-	return $Mf2toiCal->convert();
-} # end function convert()
-
+	define('PRODID_DOMAIN', 'gregorlove.com');
+}
 
 class Mf2toiCal
 {

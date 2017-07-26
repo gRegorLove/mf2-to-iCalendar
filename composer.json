@@ -12,6 +12,9 @@
 	"autoload": {
 		"psr-4": {
 			"GregorMorrill\\": "src/GregorMorrill/"
-		}
+		},
+		"files": [
+			"src/GregorMorrill/Mf2toiCal/functions.php"
+		]
 	}
 }

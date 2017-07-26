@@ -1,6 +1,6 @@
 {
-    "name": "gregorlove/mf2-to-icalendar",
-    "description": "Convert microformats h-event to iCalendar",
+	"name": "gregorlove/mf2-to-icalendar",
+	"description": "Convert microformats h-event to iCalendar",
 	"require": {
 		"php": ">=5.6.0",
 		"mf2/mf2": "^0.3.2",
@@ -8,5 +8,10 @@
 	},
 	"require-dev": {
 		"phpunit/phpunit": "*"
+	},
+	"autoload": {
+		"psr-4": {
+			"GregorMorrill\\": "src/GregorMorrill"
+		}
 	}
 }

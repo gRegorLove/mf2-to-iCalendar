@@ -1,0 +1,12 @@
+{
+    "name": "gregorlove/mf2-to-icalendar",
+    "description": "Convert microformats h-event to iCalendar",
+	"require": {
+		"php": ">=5.6.0",
+		"mf2/mf2": "^0.3.2",
+		"barnabywalters/mf-cleaner": "^0.1.4"
+	},
+	"require-dev": {
+		"phpunit/phpunit": "*"
+	}
+}

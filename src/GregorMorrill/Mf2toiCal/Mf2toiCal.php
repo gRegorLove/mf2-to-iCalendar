@@ -97,7 +97,12 @@ class Mf2toiCal
 			$lines[] = $this->fold( 'URL:' . $this->url );
 			$lines[] = $this->format_dtstamp( Mf2helper\getPlaintext($event, 'published') );
 			$lines[] = 'DTSTART:' . $this->format_date( Mf2helper\getPlaintext($event, 'start') );
-			$lines[] = 'DTEND:' . $this->format_date( Mf2helper\getPlaintext($event, 'end') );
+
+			if ( Mf2helper\hasProp($event, 'end') )
+			{
+				$lines[] = 'DTEND:' . $this->format_date( Mf2helper\getPlaintext($event, 'end') );
+			}
+
 			$lines[] = $this->fold( $this->format_property('SUMMARY') . $this->text(Mf2helper\getPlaintext($event, 'name')) );
 
 			$property = $this->format_property('DESCRIPTION');

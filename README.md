@@ -37,7 +37,7 @@ require_once('vendor/autoload.php');
 
 ### Manual Installation
 
-Alternately, you can manually install without user Composer.
+Alternately, you can manually install without using Composer.
 
 You will need to first download the php-mf2 and php-mf-cleaner libraries linked above and include them in your project.
 

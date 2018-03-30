@@ -89,3 +89,16 @@ Mf2toiCal\convert('http://example.com/event', 'sv');
 ```
 
 Detecting the language from the HTML and using that is on my TODO list.
+
+## Changelog
+
+### 0.0.2
+2018-03-29
+* Now prefers `content` h-event property over `description`
+* Adds support for dates with local time
+* Adds unit tests
+
+### 0.0.1
+2017-07-27
+* initial release
+

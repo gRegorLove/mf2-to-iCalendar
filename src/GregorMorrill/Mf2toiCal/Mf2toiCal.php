@@ -19,7 +19,7 @@ class Mf2toiCal
 	/**
 	 * @var string
 	 */
-	private $version = '0.0.1';
+	private $version = '0.0.2';
 
 	/**
 	 * @var string

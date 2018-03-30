@@ -107,8 +107,13 @@ class Mf2toiCal
 
 			$property = $this->format_property('DESCRIPTION');
 
-			# if: mf2 has description property, use it
-			if ( Mf2helper\hasProp($event, 'description') )
+			# if: mf2 has `content` property, use it
+			if ( Mf2helper\hasProp($event, 'content') )
+			{
+				$lines[] = $this->fold( $property . $this->text(Mf2helper\getPlaintext($event, 'content')) );
+			}
+			# else if: mf2 has description property, use it
+			else if ( Mf2helper\hasProp($event, 'description') )
 			{
 				$lines[] = $this->fold( $property . $this->text(Mf2helper\getPlaintext($event, 'description')) );
 			}

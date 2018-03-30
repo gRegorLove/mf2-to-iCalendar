@@ -52,6 +52,26 @@ class Mf2toiCal
 	} # end method __construct()
 
 	/**
+	 * Get Mf2toiCal property
+	 */
+	public function __get($name)
+	{
+
+		if ( isset($this->$name) )
+		{
+			return $this->$name;
+		}
+
+		$trace = debug_backtrace();
+		trigger_error(
+			'Undefined property via __get(): ' . $name .
+			' in ' . $trace[0]['file'] .
+			' on line ' . $trace[0]['line'],
+			E_USER_NOTICE);
+		return null;
+	}
+
+	/**
 	 * This method converts h-event microformats to iCalendar
 	 * @access public
 	 */
@@ -226,7 +246,7 @@ class Mf2toiCal
 		$lines = [];
 
 		if ( $bc <= 75 )
- 		{
+		{
 			return $input;
 		}
 

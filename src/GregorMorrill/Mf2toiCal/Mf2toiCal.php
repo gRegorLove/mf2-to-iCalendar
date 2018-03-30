@@ -181,9 +181,23 @@ class Mf2toiCal
 			return '';
 		}
 
-		$date = new DateTime($input);
-		$date->setTimezone(new DateTimeZone('UTC'));
-		return $date->format('Ymd\THis\Z');
+		$parsed = date_parse($input);
+		$has_timezone = ( isset($parsed['zone']) ) ? true : false;
+
+		# if: datetime string has timezone
+		if ( $has_timezone )
+		{
+			$date = new DateTime($input);
+			$date->setTimezone(new DateTimeZone('UTC'));
+			return $date->format('Ymd\THis\Z');
+		}
+		# else:
+		else
+		{
+			$date = new DateTime($input);
+			return $date->format('Ymd\THis');
+		}
+
 	} # end method format_date()
 
 	/**

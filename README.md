@@ -68,10 +68,6 @@ define('PRODID_DOMAIN', 'example.com');
 Mf2toiCal\convert('https://example.com/event');
 ```
 
-### Exceptions
-
-If the specified URL does not have h-event microformats, an Exception is thrown. Your code should be set up to handle that Exception.
-
 ### Language and Character Set
 
 This script defaults to language `en` and charset `utf-8` for text content lines in the generated .ics file. You can specify different options when calling `convert()`:

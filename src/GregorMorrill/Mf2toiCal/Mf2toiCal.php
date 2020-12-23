@@ -10,7 +10,7 @@ mb_internal_encoding('UTF-8');
 
 if ( !defined('PRODID_DOMAIN') )
 {
-	define('PRODID_DOMAIN', 'gregorlove.com');
+	define('PRODID_DOMAIN', 'example.com');
 }
 
 class Mf2toiCal

@@ -1,4 +1,5 @@
-<?php namespace GregorMorrill\Mf2toiCal;
+<?php
+namespace GregorMorrill\Mf2toiCal;
 
 /**
  * Function to call Mf2toiCal::convert()
@@ -10,5 +11,5 @@ function convert($url, $lang = 'en', $charset = 'utf-8')
 {
 	$Mf2toiCal = new Mf2toiCal($url, $lang, $charset);
 	return $Mf2toiCal->convert();
-} # end function convert()
+}
 

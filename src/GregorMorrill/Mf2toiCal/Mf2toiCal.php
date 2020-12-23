@@ -1,17 +1,16 @@
-<?php namespace GregorMorrill\Mf2toiCal;
+<?php
+namespace GregorMorrill\Mf2toiCal;
 
 use DateTime;
 use DateTimeZone;
-use Exception;
 use Mf2;
 use BarnabyWalters\Mf2 as Mf2helper;
-
 
 mb_internal_encoding('UTF-8');
 
 if ( !defined('PRODID_DOMAIN') )
 {
-	define('PRODID_DOMAIN', 'gregorlove.com');
+	define('PRODID_DOMAIN', 'example.com');
 }
 
 class Mf2toiCal
@@ -19,7 +18,7 @@ class Mf2toiCal
 	/**
 	 * @var string
 	 */
-	private $version = '0.0.2';
+	private $version = '0.0.3';
 
 	/**
 	 * @var string
@@ -49,7 +48,7 @@ class Mf2toiCal
 		$this->url = $url;
 		$this->lang = $lang;
 		$this->charset = $charset;
-	} # end method __construct()
+	}
 
 	/**
 	 * Get Mf2toiCal property
@@ -80,39 +79,32 @@ class Mf2toiCal
 		$microformats = Mf2\fetch($this->url);
 		$events = Mf2helper\findMicroformatsByType($microformats, 'h-event');
 
-		# if: no h-events found
-		if ( !$events )
-		{
-			throw new Exception('No h-event microformats were found.');
-		} # end if
-
 		$lines = [];
 		$lines[] = 'BEGIN:VCALENDAR';
 		$lines[] = sprintf('PRODID:-//%s//mf2 to iCalendar %s//EN', PRODID_DOMAIN, $this->version);
 		$lines[] = 'VERSION:2.0';
 		$lines[] = 'METHOD:PUBLISH';
 
-		# loop: each event
 		foreach ( $events as $event )
 		{
 			$lines[] = 'BEGIN:VEVENT';
 
-			# if: mf2 has a u-url, update $this->url
+			# mf2 has a u-url, update $this->url
 			if ( Mf2helper\hasProp($event, 'url') )
 			{
 				$this->url = Mf2helper\getPlaintext($event, 'url');
-			} # end if
+			}
 
-			# if: mf2 has u-uid, use it
+			# mf2 has u-uid, use it
 			if ( Mf2helper\hasProp($event, 'uid') )
 			{
 				$lines[] = $this->fold( 'UID:' . Mf2helper\getPlaintext($event, 'uid') );
 			}
-			# else: fallback to $this->url
+			# fallback to $this->url
 			else
 			{
 				$lines[] = $this->fold( 'UID:' . $this->url );
-			} # end if
+			}
 
 			$lines[] = $this->fold( 'URL:' . $this->url );
 			$lines[] = $this->format_dtstamp( Mf2helper\getPlaintext($event, 'published') );
@@ -127,30 +119,30 @@ class Mf2toiCal
 
 			$property = $this->format_property('DESCRIPTION');
 
-			# if: mf2 has `content` property, use it
+			# mf2 has `content` property, use it
 			if ( Mf2helper\hasProp($event, 'content') )
 			{
 				$lines[] = $this->fold( $property . $this->text(Mf2helper\getPlaintext($event, 'content')) );
 			}
-			# else if: mf2 has description property, use it
+			# mf2 has description property, use it
 			else if ( Mf2helper\hasProp($event, 'description') )
 			{
 				$lines[] = $this->fold( $property . $this->text(Mf2helper\getPlaintext($event, 'description')) );
 			}
-			# else if: mf2 has summary property, use it as fallback description
+			# mf2 has summary property, use it as fallback description
 			else if ( Mf2helper\hasProp($event, 'summary') )
 			{
 				$lines[] = $this->fold( $property . $this->text(Mf2helper\getPlaintext($event, 'summary')) );
-			} # end if
+			}
 
-			# if: mf2 has a location, use it
+			# mf2 has a location, use it
 			if ( Mf2helper\hasProp($event, 'location') )
 			{
 				$lines[] = $this->fold( $this->format_property('LOCATION') . $this->text(Mf2helper\getPlaintext($event, 'location')) );
-			} # end if
+			}
 
 			$lines[] = 'END:VEVENT';
-		} # end loop
+		}
 
 		$lines[] = 'END:VCALENDAR';
 
@@ -160,7 +152,7 @@ class Mf2toiCal
 		header('Content-Type: text/calendar; charset=utf8; name=calendar.ics');
 		echo implode("\r\n", array_filter($lines));
 		exit;
-	} # end method convert()
+	}
 
 	/**
 	 * Format iCalendar property name
@@ -170,7 +162,7 @@ class Mf2toiCal
 	public function format_property($name)
 	{
 		return sprintf('%s;LANGUAGE=%s;CHARSET=%s:', $name, $this->lang, $this->charset);
-	} # end method format_property()
+	}
 
 	/**
 	 * Format iCalendar dtstamp content line
@@ -186,7 +178,7 @@ class Mf2toiCal
 		}
 
 		return 'DTSTAMP:' . $dtstamp;
-	} # end method format_dtstamp()
+	}
 
 	/**
 	 * Format iCalendar date value
@@ -204,21 +196,20 @@ class Mf2toiCal
 		$parsed = date_parse($input);
 		$has_timezone = ( isset($parsed['zone']) ) ? true : false;
 
-		# if: datetime string has timezone
+		# datetime string has timezone
 		if ( $has_timezone )
 		{
 			$date = new DateTime($input);
 			$date->setTimezone(new DateTimeZone('UTC'));
 			return $date->format('Ymd\THis\Z');
 		}
-		# else:
 		else
 		{
 			$date = new DateTime($input);
 			return $date->format('Ymd\THis');
 		}
 
-	} # end method format_date()
+	}
 
 	/**
 	 * Escape iCalendar text content lines
@@ -232,7 +223,7 @@ class Mf2toiCal
 		$output = str_replace(',', '\\,', $output);
 		$output = str_replace(["\r\n", "\n"], '\n', $output);
 		return trim($output);
-	} # end method text()
+	}
 
 	/**
 	 * Fold iCalendar content lines
@@ -262,7 +253,7 @@ class Mf2toiCal
 		}
 
 		return join($lines, "\r\n\t");
-	} # end method fold()
+	}
 
-} # end class Mf2toiCal
+}
 

@@ -1,6 +1,6 @@
 # mf2-to-iCalendar
 
-Convert microformats [h-event](http://microformats.org/wiki/h-event) to iCalendar.
+Convert microformats [h-event](https://microformats.org/wiki/h-event) to iCalendar.
 
 Note: This is currently very much an _alpha_ version, doing the minimal amount I needed it to do. I plan to expand it, though. Issue reports are welcomed.
 
@@ -32,7 +32,7 @@ Then in the project file you want to use it, import the namespace and add the Co
 ```php
 use GregorMorrill\Mf2toiCal;
 
-require_once('vendor/autoload.php');
+require_once 'vendor/autoload.php';
 ```
 
 ### Manual Installation
@@ -46,15 +46,15 @@ Then download the files in this project's directory `src/GregorMorrill/Mf2toiCal
 ```php
 use GregorMorrill\Mf2toiCal;
 
-require_once('src/GregorMorrill/Mf2toiCal/Mf2toiCal.php');
-require_once('src/GregorMorrill/Mf2toiCal/functions.php');
+require_once 'src/GregorMorrill/Mf2toiCal/Mf2toiCal.php';
+require_once 'src/GregorMorrill/Mf2toiCal/functions.php';
 ```
 
 ### Specify the Domain
 
 The generated iCalendar .ics file has a `PRODID` that includes a domain and the name/version of this script.
 
-It's recommended to specify the domain you're using this on. If you don't, it will default to domain, gregorlove.com.
+It's recommended to specify the domain you're using this on. If you don't, it will default to example.com.
 
 To specify your domain, after installation define the constant:
 
@@ -65,14 +65,7 @@ define('PRODID_DOMAIN', 'example.com');
 ## Usage
 
 ```php
-try
-{
-	Mf2toiCal\convert('http://example.com/event');
-}
-catch ( Exception $e )
-{
-	echo $e->getMessage();
-}
+Mf2toiCal\convert('https://example.com/event');
 ```
 
 ### Exceptions
@@ -85,12 +78,17 @@ This script defaults to language `en` and charset `utf-8` for text content lines
 
 ```php
 # parameters: $url, $lang, $charset
-Mf2toiCal\convert('http://example.com/event', 'sv');
+Mf2toiCal\convert('https://example.com/event', 'sv');
 ```
 
 Detecting the language from the HTML and using that is on my TODO list.
 
 ## Changelog
+
+### 0.0.3
+2020-12-23
+* No longer throws an Exception if no h-event microformats found when converting. Instead will generate an "empty" iCalendar.
+* Changed default domain to example.com
 
 ### 0.0.2
 2018-03-29

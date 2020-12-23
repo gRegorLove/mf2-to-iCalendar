@@ -2,7 +2,6 @@
 
 use DateTime;
 use DateTimeZone;
-use Exception;
 use Mf2;
 use BarnabyWalters\Mf2 as Mf2helper;
 
@@ -19,7 +18,7 @@ class Mf2toiCal
 	/**
 	 * @var string
 	 */
-	private $version = '0.0.2';
+	private $version = '0.0.3';
 
 	/**
 	 * @var string
@@ -79,12 +78,6 @@ class Mf2toiCal
 	{
 		$microformats = Mf2\fetch($this->url);
 		$events = Mf2helper\findMicroformatsByType($microformats, 'h-event');
-
-		# if: no h-events found
-		if ( !$events )
-		{
-			throw new Exception('No h-event microformats were found.');
-		} # end if
 
 		$lines = [];
 		$lines[] = 'BEGIN:VCALENDAR';

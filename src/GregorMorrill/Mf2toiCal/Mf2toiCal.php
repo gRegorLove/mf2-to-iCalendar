@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 namespace GregorMorrill\Mf2toiCal;
 
 use DateTime;
@@ -35,16 +38,11 @@ class Mf2toiCal
 	 */
 	private $charset;
 
-	/**
-	 * Constructor
-	 * @param string $url
-	 * @param string $lang default to 'en'
-	 * @param string $charset default to 'utf-8'
-	 * @access public
-	 * @return
-	 */
-	public function __construct($url, $lang = 'en', $charset = 'utf-8')
-	{
+	public function __construct(
+		string $url,
+		string $lang = 'en',
+		string $charset = 'utf-8'
+	) {
 		$this->url = $url;
 		$this->lang = $lang;
 		$this->charset = $charset;
@@ -158,20 +156,16 @@ class Mf2toiCal
 
 	/**
 	 * Format iCalendar property name
-	 * @param string $name
-	 * @return string
 	 */
-	public function format_property($name)
+	public function format_property(string $name): string
 	{
 		return sprintf('%s;LANGUAGE=%s;CHARSET=%s:', $name, $this->lang, $this->charset);
 	}
 
 	/**
 	 * Format iCalendar dtstamp content line
-	 * @param string $input
-	 * @return string
 	 */
-	public function format_dtstamp($input)
+	public function format_dtstamp(string $input): string
 	{
 
 		if ( !$dtstamp = $this->format_date($input) )
@@ -184,10 +178,8 @@ class Mf2toiCal
 
 	/**
 	 * Format iCalendar date value
-	 * @param string $input
-	 * @return string
 	 */
-	public function format_date($input)
+	public function format_date(string $input): string
 	{
 
 		if ( !$input )
@@ -215,10 +207,8 @@ class Mf2toiCal
 
 	/**
 	 * Escape iCalendar text content lines
-	 * @param string $input
-	 * @return string
 	 */
-	public function text($input)
+	public function text(string $input): string
 	{
 		$output = str_replace('\\', '\\\\', $input);
 		$output = str_replace(';', '\\;', $output);
@@ -229,10 +219,8 @@ class Mf2toiCal
 
 	/**
 	 * Fold iCalendar content lines
-	 * @param string $input
-	 * @return string
 	 */
-	public function fold($input)
+	public function fold(string $input): string
 	{
 		$bc = strlen($input);
 		$index = 0;

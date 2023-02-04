@@ -1,7 +1,9 @@
 <?php
+
+declare(strict_types=1);
+
 use PHPUnit\Framework\TestCase;
 use GregorMorrill\Mf2toiCal\Mf2toiCal;
-
 
 final class Mf2toiCalTest extends TestCase
 {

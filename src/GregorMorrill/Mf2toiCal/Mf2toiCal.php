@@ -71,12 +71,14 @@ class Mf2toiCal
 	}
 
 	/**
-	 * This method converts h-event microformats to iCalendar
-	 * @access public
+	 * Convert h-event microformats to iCalendar
 	 */
-	public function convert()
+	public function convert(): void
 	{
-		$microformats = Mf2\fetch($this->url);
+		// mf2 parsing can return null if not an HTML document.
+		// use null coalesce operator to ensure $microformats
+		// is always an array
+		$microformats = Mf2\fetch($this->url) ?? [];
 		$events = Mf2helper\findMicroformatsByType($microformats, 'h-event');
 
 		$lines = [];

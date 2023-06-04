@@ -252,7 +252,7 @@ class Mf2toiCal
 			$lines[] = $line;
 		}
 
-		return join($lines, "\r\n\t");
+		return implode("\r\n\t", $lines);
 	}
 
 }

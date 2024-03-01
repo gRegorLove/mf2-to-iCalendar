@@ -5,7 +5,7 @@ Convert microformats [h-event](https://microformats.org/wiki/h-event) to iCalend
 Note: This is currently very much an _alpha_ version, doing the minimal amount I needed it to do. I plan to expand it, though. Issue reports are welcomed.
 
 ## Requirements
-* PHP 5.6+
+* PHP 7.4+
 * [php-mf2](https://github.com/indieweb/php-mf2) - included via Composer
 * [php-mf-cleaner](https://github.com/barnabywalters/php-mf-cleaner) - included via Composer
 
@@ -22,7 +22,7 @@ It is recommended to install via [Composer](https://getcomposer.org/). This proj
         }
     ],
     "require": {
-        "gregorlove/mf2-to-icalendar": "dev-master"
+        "gregorlove/mf2-to-icalendar": "dev-main"
     }
 }
 
@@ -68,10 +68,6 @@ define('PRODID_DOMAIN', 'example.com');
 Mf2toiCal\convert('https://example.com/event');
 ```
 
-### Exceptions
-
-If the specified URL does not have h-event microformats, an Exception is thrown. Your code should be set up to handle that Exception.
-
 ### Language and Character Set
 
 This script defaults to language `en` and charset `utf-8` for text content lines in the generated .ics file. You can specify different options when calling `convert()`:
@@ -84,6 +80,12 @@ Mf2toiCal\convert('https://example.com/event', 'sv');
 Detecting the language from the HTML and using that is on my TODO list.
 
 ## Changelog
+
+### 0.0.4
+2024-02-29
+* Update dependencies
+* Add type declarations and strict typing
+* Fix errors
 
 ### 0.0.3
 2020-12-23

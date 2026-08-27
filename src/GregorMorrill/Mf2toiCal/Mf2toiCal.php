@@ -99,7 +99,7 @@ class Mf2toiCal
             }
 
             $lines[] = $this->fold( 'URL:' . $url );
-            $lines[] = $this->format_dtstamp( Mf2helper\getPlaintext($event, 'published') );
+            $lines[] = $this->format_dtstamp( Mf2helper\getPlaintext($event, 'published', '') );
             $lines[] = 'DTSTART:' . $this->format_date( Mf2helper\getPlaintext($event, 'start') );
 
             if (Mf2helper\hasProp($event, 'end')) {

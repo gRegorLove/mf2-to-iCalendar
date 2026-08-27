@@ -70,20 +70,23 @@ class Mf2toiCal
         foreach ($events as $event) {
             $lines[] = 'BEGIN:VEVENT';
 
-            # mf2 has a u-url, update $this->url
+            # default $url
+            $url = $this->url;
+
+            # mf2 has a u-url, update $url
             if (Mf2helper\hasProp($event, 'url')) {
-                $this->url = Mf2helper\getPlaintext($event, 'url');
+                $url = Mf2helper\getPlaintext($event, 'url');
             }
 
             # mf2 has u-uid, use it
             if (Mf2helper\hasProp($event, 'uid')) {
                 $lines[] = $this->fold( 'UID:' . Mf2helper\getPlaintext($event, 'uid') );
             } else {
-                # fallback to $this->url
-                $lines[] = $this->fold( 'UID:' . $this->url );
+                # fallback to $url
+                $lines[] = $this->fold( 'UID:' . $url );
             }
 
-            $lines[] = $this->fold( 'URL:' . $this->url );
+            $lines[] = $this->fold( 'URL:' . $url );
             $lines[] = $this->format_dtstamp( Mf2helper\getPlaintext($event, 'published') );
             $lines[] = 'DTSTART:' . $this->format_date( Mf2helper\getPlaintext($event, 'start') );
 

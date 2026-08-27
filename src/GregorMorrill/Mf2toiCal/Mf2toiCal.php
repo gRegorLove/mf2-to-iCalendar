@@ -21,6 +21,7 @@ class Mf2toiCal
     private string $url;
     private string $lang;
     private string $charset;
+    private ?string $html = null;
 
     public function __construct(
         string $url,
@@ -50,6 +51,11 @@ class Mf2toiCal
         return null;
     }
 
+    public function setHtml(string $html): void
+    {
+        $this->html = $html;
+    }
+
     /**
      * Convert h-event microformats to iCalendar
      */
@@ -58,7 +64,13 @@ class Mf2toiCal
         // mf2 parsing can return null if not an HTML document.
         // use null coalesce operator to ensure $microformats
         // is always an array
-        $microformats = Mf2\fetch($this->url) ?? [];
+
+        if ($this->html) {
+            $microformats = Mf2\parse($this->html, $this->url) ?? [];
+        } else {
+            $microformats = Mf2\fetch($this->url) ?? [];
+        }
+
         $events = Mf2helper\findMicroformatsByType($microformats, 'h-event');
 
         $lines = [];

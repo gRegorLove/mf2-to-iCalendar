@@ -32,6 +32,14 @@ final class Mf2toiCalTest extends TestCase
         $this->assertEquals('utf-8', $Mf2toiCal->charset);
     }
 
+    public function testSetHtml(): void
+    {
+        $html = '<div class="h-event"><p class="p-name">Test Event</p></div>';
+        $Mf2toiCal = new Mf2toiCal('http://example.com');
+        $Mf2toiCal->setHtml($html);
+        $this->assertEquals($html, $Mf2toiCal->html);
+    }
+
     public function testFormatProperty(): void
     {
         $Mf2toiCal = new Mf2toiCal('http://example.com');

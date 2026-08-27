@@ -22,7 +22,7 @@ It is recommended to install via [Composer](https://getcomposer.org/). This proj
         }
     ],
     "require": {
-        "gregorlove/mf2-to-icalendar": "dev-main"
+        "gregorlove/mf2-to-icalendar": "0.0.5"
     }
 }
 
@@ -54,7 +54,7 @@ require_once 'src/GregorMorrill/Mf2toiCal/functions.php';
 
 The generated iCalendar .ics file has a `PRODID` that includes a domain and the name/version of this script.
 
-It's recommended to specify the domain you're using this on. If you don't, it will default to example.com.
+It's recommended to specify the domain you're using this on. If you don't, it will default to `example.com`.
 
 To specify your domain, after installation define the constant:
 
@@ -64,20 +64,35 @@ define('PRODID_DOMAIN', 'example.com');
 
 ## Usage
 
+To fetch a URL and convert:
+
 ```php
 Mf2toiCal\convert('https://example.com/event');
 ```
 
+To provide direct HTML input and convert:
+
+```php
+Mf2toiCal\convertHtmlInput('<div class="h-event">...</div>', 'https://example.com/event2');
+```
+
+Note: the URL is not fetched when using `convertHtmlInput()`, but is still used as the default `URL` and `UID` properties in the .ics file.
+
 ### Language and Character Set
 
-This script defaults to language `en` and charset `utf-8` for text content lines in the generated .ics file. You can specify different options when calling `convert()`:
+This script defaults to language `en` and charset `utf-8` for text content lines in the generated .ics file. You can specify different options when calling either function:
 
 ```php
 # parameters: $url, $lang, $charset
 Mf2toiCal\convert('https://example.com/event', 'sv');
 ```
 
-Detecting the language from the HTML and using that is on my TODO list.
+```php
+# parameters: $html, $url, $lang, $charset
+Mf2toiCal\convertHtmlInput($html, 'https://example.com/event2', 'sv');
+```
+
+Detecting the language from the HTML and using that is on the TODO list.
 
 ## Changelog
 

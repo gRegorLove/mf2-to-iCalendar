@@ -17,25 +17,10 @@ if (!defined('PRODID_DOMAIN')) {
 
 class Mf2toiCal
 {
-    /**
-     * @var string
-     */
-    private $version = '0.0.4';
-
-    /**
-     * @var string
-     */
-    private $url;
-
-    /**
-     * @var string
-     */
-    private $lang;
-
-    /**
-     * @var string
-     */
-    private $charset;
+    private string $version = '0.0.4';
+    private string $url;
+    private string $lang;
+    private string $charset;
 
     public function __construct(
         string $url,

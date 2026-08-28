@@ -120,5 +120,34 @@ final class Mf2toiCalTest extends TestCase
         $this->assertEquals("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec et posuere.\r\n\t💩", $folded);
     }
 
+    public function testFormatStatus(): void
+    {
+        $Mf2toiCal = new Mf2toiCal('http://example.com');
+
+        $result = $Mf2toiCal->format_status('tentative');
+        $this->assertEquals($result, 'STATUS:TENTATIVE');
+
+        $result = $Mf2toiCal->format_status('cancelled');
+        $this->assertEquals($result, 'STATUS:CANCELLED');
+
+        $result = $Mf2toiCal->format_status('confirmed');
+        $this->assertEquals($result, 'STATUS:CONFIRMED');
+
+        $result = $Mf2toiCal->format_status('CONFIRMED');
+        $this->assertEquals($result, 'STATUS:CONFIRMED');
+
+        # mixed case
+        $result = $Mf2toiCal->format_status('CONfirmeD');
+        $this->assertEquals($result, 'STATUS:CONFIRMED');
+
+        # extra whitespace
+        $result = $Mf2toiCal->format_status('   tentative ');
+        $this->assertEquals($result, 'STATUS:TENTATIVE');
+
+        # invalid status
+        $result = $Mf2toiCal->format_status('maybe');
+        $this->assertEquals($result, null);
+    }
+
 }
 

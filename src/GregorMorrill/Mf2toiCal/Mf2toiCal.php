@@ -126,6 +126,11 @@ class Mf2toiCal
                 $lines[] = $this->fold( $this->format_property('LOCATION') . $this->text(Mf2helper\getPlaintext($event, 'location')) );
             }
 
+            $status = Mf2helper\getPlaintext($event, 'status') ?? Mf2helper\getPlaintext($event, 'x-status');
+            if ($status) {
+                $lines[] = $this->format_status($status);
+            }
+
             $lines[] = 'END:VEVENT';
         }
 
@@ -183,6 +188,26 @@ class Mf2toiCal
             $date = new DateTime($input);
             return $date->format('Ymd\THis');
         }
+    }
+
+    /**
+     * EXPERIMENTAL: the `status` property is not known to be published
+     * currently, so this is intended as a proof of concept.
+     *
+     * If there is a p-status or p-x-status property with a valid value,
+     * add it to the generated lines
+     *
+     * @see https://datatracker.ietf.org/doc/html/rfc5545#section-3.8.1.11
+     */
+    public function format_status(string $input): ?string
+    {
+        $status = trim(strtoupper($input));
+
+        if (!in_array($status, ['TENTATIVE', 'CONFIRMED', 'CANCELLED',])) {
+            return null;
+        }
+
+        return 'STATUS:' . $status;
     }
 
     /**

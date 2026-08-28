@@ -94,6 +94,14 @@ Mf2toiCal\convertHtmlInput($html, 'https://example.com/event2', 'sv');
 
 Detecting the language from the HTML and using that is on the TODO list.
 
+### Experimental
+
+Starting with v0.0.5, it will attempt to parse `p-status` or `p-x-status` properties for the [iCalendar values](https://datatracker.ietf.org/doc/html/rfc5545#section-3.8.1.11) “tentative”, “cancelled”, or “confirmed” and include those in the generated .ics.
+
+These properties are not known to be in published `h-event` posts yet and it is possible the property will change when there is more consensus. If you are a publisher, consider this before adding the properties to your events.
+
+I will plan to keep this tool up to date with whatever property represents the event status.
+
 ## Changelog
 
 ### 0.0.4

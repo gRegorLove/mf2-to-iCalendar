@@ -104,24 +104,5 @@ I will plan to keep this tool up to date with whatever property represents the e
 
 ## Changelog
 
-### 0.0.4
-2024-02-29
-* Update dependencies
-* Add type declarations and strict typing
-* Fix errors
-
-### 0.0.3
-2020-12-23
-* No longer throws an Exception if no h-event microformats found when converting. Instead will generate an "empty" iCalendar.
-* Changed default domain to example.com
-
-### 0.0.2
-2018-03-29
-* Now prefers `content` h-event property over `description`
-* Adds support for dates with local time
-* Adds unit tests
-
-### 0.0.1
-2017-07-27
-* initial release
+* [Changelog](CHANGELOG.md)
 

@@ -22,7 +22,7 @@ It is recommended to install via [Composer](https://getcomposer.org/). This proj
         }
     ],
     "require": {
-        "gregorlove/mf2-to-icalendar": "dev-main"
+        "gregorlove/mf2-to-icalendar": "0.0.5"
     }
 }
 
@@ -54,7 +54,7 @@ require_once 'src/GregorMorrill/Mf2toiCal/functions.php';
 
 The generated iCalendar .ics file has a `PRODID` that includes a domain and the name/version of this script.
 
-It's recommended to specify the domain you're using this on. If you don't, it will default to example.com.
+It's recommended to specify the domain you're using this on. If you don't, it will default to `example.com`.
 
 To specify your domain, after installation define the constant:
 
@@ -64,41 +64,45 @@ define('PRODID_DOMAIN', 'example.com');
 
 ## Usage
 
+To fetch a URL and convert:
+
 ```php
 Mf2toiCal\convert('https://example.com/event');
 ```
 
+To provide direct HTML input and convert:
+
+```php
+Mf2toiCal\convertHtmlInput('<div class="h-event">...</div>', 'https://example.com/event2');
+```
+
+Note: the URL is not fetched when using `convertHtmlInput()`, but is still used as the default `URL` and `UID` properties in the .ics file.
+
 ### Language and Character Set
 
-This script defaults to language `en` and charset `utf-8` for text content lines in the generated .ics file. You can specify different options when calling `convert()`:
+This script defaults to language `en` and charset `utf-8` for text content lines in the generated .ics file. You can specify different options when calling either function:
 
 ```php
 # parameters: $url, $lang, $charset
 Mf2toiCal\convert('https://example.com/event', 'sv');
 ```
 
-Detecting the language from the HTML and using that is on my TODO list.
+```php
+# parameters: $html, $url, $lang, $charset
+Mf2toiCal\convertHtmlInput($html, 'https://example.com/event2', 'sv');
+```
+
+Detecting the language from the HTML and using that is on the TODO list.
+
+### Experimental
+
+Starting with v0.0.5, it will attempt to parse `p-event-status` properties for the [iCalendar values](https://datatracker.ietf.org/doc/html/rfc5545#section-3.8.1.11) “tentative”, “cancelled”, or “confirmed” and include those in the generated .ics.
+
+These properties are not known to be in published `h-event` posts yet and it is possible the property will change when there is more consensus. If you are a publisher, consider this before adding the properties to your events.
+
+I will plan to keep this tool up to date with whatever property represents the event status.
 
 ## Changelog
 
-### 0.0.4
-2024-02-29
-* Update dependencies
-* Add type declarations and strict typing
-* Fix errors
-
-### 0.0.3
-2020-12-23
-* No longer throws an Exception if no h-event microformats found when converting. Instead will generate an "empty" iCalendar.
-* Changed default domain to example.com
-
-### 0.0.2
-2018-03-29
-* Now prefers `content` h-event property over `description`
-* Adds support for dates with local time
-* Adds unit tests
-
-### 0.0.1
-2017-07-27
-* initial release
+* [Changelog](CHANGELOG.md)
 

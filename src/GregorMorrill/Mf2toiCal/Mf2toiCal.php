@@ -17,25 +17,11 @@ if (!defined('PRODID_DOMAIN')) {
 
 class Mf2toiCal
 {
-    /**
-     * @var string
-     */
-    private $version = '0.0.4';
-
-    /**
-     * @var string
-     */
-    private $url;
-
-    /**
-     * @var string
-     */
-    private $lang;
-
-    /**
-     * @var string
-     */
-    private $charset;
+    private string $version = '0.0.4';
+    private string $url;
+    private string $lang;
+    private string $charset;
+    private ?string $html = null;
 
     public function __construct(
         string $url,
@@ -65,6 +51,11 @@ class Mf2toiCal
         return null;
     }
 
+    public function setHtml(string $html): void
+    {
+        $this->html = $html;
+    }
+
     /**
      * Convert h-event microformats to iCalendar
      */
@@ -73,7 +64,13 @@ class Mf2toiCal
         // mf2 parsing can return null if not an HTML document.
         // use null coalesce operator to ensure $microformats
         // is always an array
-        $microformats = Mf2\fetch($this->url) ?? [];
+
+        if ($this->html) {
+            $microformats = Mf2\parse($this->html, $this->url) ?? [];
+        } else {
+            $microformats = Mf2\fetch($this->url) ?? [];
+        }
+
         $events = Mf2helper\findMicroformatsByType($microformats, 'h-event');
 
         $lines = [];
@@ -85,21 +82,24 @@ class Mf2toiCal
         foreach ($events as $event) {
             $lines[] = 'BEGIN:VEVENT';
 
-            # mf2 has a u-url, update $this->url
+            # default $url
+            $url = $this->url;
+
+            # mf2 has a u-url, update $url
             if (Mf2helper\hasProp($event, 'url')) {
-                $this->url = Mf2helper\getPlaintext($event, 'url');
+                $url = Mf2helper\getPlaintext($event, 'url');
             }
 
             # mf2 has u-uid, use it
             if (Mf2helper\hasProp($event, 'uid')) {
                 $lines[] = $this->fold( 'UID:' . Mf2helper\getPlaintext($event, 'uid') );
             } else {
-                # fallback to $this->url
-                $lines[] = $this->fold( 'UID:' . $this->url );
+                # fallback to $url
+                $lines[] = $this->fold( 'UID:' . $url );
             }
 
-            $lines[] = $this->fold( 'URL:' . $this->url );
-            $lines[] = $this->format_dtstamp( Mf2helper\getPlaintext($event, 'published') );
+            $lines[] = $this->fold( 'URL:' . $url );
+            $lines[] = $this->format_dtstamp( Mf2helper\getPlaintext($event, 'published', '') );
             $lines[] = 'DTSTART:' . $this->format_date( Mf2helper\getPlaintext($event, 'start') );
 
             if (Mf2helper\hasProp($event, 'end')) {
@@ -124,6 +124,10 @@ class Mf2toiCal
             # mf2 has a location, use it
             if (Mf2helper\hasProp($event, 'location')) {
                 $lines[] = $this->fold( $this->format_property('LOCATION') . $this->text(Mf2helper\getPlaintext($event, 'location')) );
+            }
+
+            if ($status = Mf2helper\getPlaintext($event, 'event-status')) {
+                $lines[] = $this->format_status($status);
             }
 
             $lines[] = 'END:VEVENT';
@@ -183,6 +187,26 @@ class Mf2toiCal
             $date = new DateTime($input);
             return $date->format('Ymd\THis');
         }
+    }
+
+    /**
+     * EXPERIMENTAL: the `event-status` property is not known to be published
+     * currently, so this is intended as a proof of concept.
+     *
+     * If there is a p-event-status property with a valid value,
+     * add it to the generated lines
+     *
+     * @see https://datatracker.ietf.org/doc/html/rfc5545#section-3.8.1.11
+     */
+    public function format_status(string $input): ?string
+    {
+        $status = trim(strtoupper($input));
+
+        if (!in_array($status, ['TENTATIVE', 'CONFIRMED', 'CANCELLED',])) {
+            return null;
+        }
+
+        return 'STATUS:' . $status;
     }
 
     /**

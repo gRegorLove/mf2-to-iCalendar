@@ -126,8 +126,7 @@ class Mf2toiCal
                 $lines[] = $this->fold( $this->format_property('LOCATION') . $this->text(Mf2helper\getPlaintext($event, 'location')) );
             }
 
-            $status = Mf2helper\getPlaintext($event, 'status') ?? Mf2helper\getPlaintext($event, 'x-status');
-            if ($status) {
+            if ($status = Mf2helper\getPlaintext($event, 'event-status')) {
                 $lines[] = $this->format_status($status);
             }
 
@@ -191,10 +190,10 @@ class Mf2toiCal
     }
 
     /**
-     * EXPERIMENTAL: the `status` property is not known to be published
+     * EXPERIMENTAL: the `event-status` property is not known to be published
      * currently, so this is intended as a proof of concept.
      *
-     * If there is a p-status or p-x-status property with a valid value,
+     * If there is a p-event-status property with a valid value,
      * add it to the generated lines
      *
      * @see https://datatracker.ietf.org/doc/html/rfc5545#section-3.8.1.11
